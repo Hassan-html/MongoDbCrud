@@ -4,7 +4,6 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { connect } from "./dbconfig/mongoCon.js";
 import Student from "./models/userSchema.js";
-import { ProfilingLevel } from "mongodb";
 config();
 const app = express();
 app.use(cors());
