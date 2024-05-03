@@ -4,10 +4,13 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { connect } from "./dbconfig/mongoCon.js";
 import Student from "./models/userSchema.js";
+import Mailer from "./models/mailer.js";
 config();
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// functions
 
 const findStudent = async () => {
   await connect();
@@ -19,6 +22,8 @@ const singleStudent = async (id) => {
   const Students = await Student.findOne({ _id: id });
   return Students;
 };
+
+// Crud for students
 
 // time to create update api
 // p.n i love tabine it give code on its own harigato gozaimasu
@@ -91,6 +96,21 @@ app.post("/Add", async (req, res) => {
   console.log(savedStudent);
 
   return res.json({ message: "Your data arrived at end point" });
+});
+
+// send email
+
+app.post("/mail", async (req, res) => {
+  const body = await req.body;
+  const { email } = body;
+  try {
+    Mailer(email);
+    console.log("Mail sent");
+  } catch (error) {
+    console.log("Mailer Error: " + error);
+  }
+  console.log(body);
+  return res.json({ message: "mail sent" });
 });
 
 app.listen(process.env.PORT, () => {
